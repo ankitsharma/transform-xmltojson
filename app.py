@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 from lxml import etree
 import logging
 import boto3
+import os
 
 app = Flask(__name__)
 
@@ -11,12 +12,12 @@ logger = logging.getLogger()
 
 # Initialize the SQS client
 
-sqs = boto3.client('sqs', region_name='<QUEUE_REGION_NAME>', 
-                   aws_access_key_id='<ACCESS_KYE>',
-                   aws_secret_access_key='<SECRET_ACCESS_KEY>')
+sqs = boto3.client('sqs', region_name=os.getenv("SQS_QUEUE_REGION"), 
+                   aws_access_key_id=os.getenv("SQS_QUEUE_ACCESS_ID"),
+                   aws_secret_access_key=os.getenv("SQS_QUEUE_SECRET_ID"))
 
 # Replace 'your-queue-url' with the actual URL of your SQS queue
-SQS_QUEUE_URL = '<YOUR_QUEUE_URL>'
+SQS_QUEUE_URL = os.getenv("SQS_QUEUE_URL")
 
 # The same Lambda function logic, but adapted to work with Flask
 @app.route('/transform', methods=['POST'])
